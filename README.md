@@ -60,4 +60,4 @@ TODO
 
 ## Frontend
 
-TODO
+The frontend uses React to create reusable UI components. The frontend will retrive patient data such as vital signs and CAP recomendation from the backend. With this data it will pass into React UI components.  Utalizing React makes it easier to update state of the application to seamlessly update the UI components when new vitals/recommendation data comes in. 
