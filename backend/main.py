@@ -2,12 +2,16 @@ import os
 import json
 from datetime import datetime, timedelta
 from collections import defaultdict
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from fhirclient.client import FHIRClient
 from fhirclient.models.observation import Observation
 from fhirclient.models.patient import Patient
 from fhirclient.models.condition import Condition
+import mock
+
+mock_patients = mock.load_data()
+
 
 GATECH_FHIR_API_URL = 'http://fhirtesting.hdap.gatech.edu/hapi-fhir-jpaserver-example/baseDstu3'
 FHIR_TEST_API_URL = 'http://fhirtest.uhn.ca/baseDstu3'
@@ -29,14 +33,31 @@ app = Flask(__name__)
 CORS(app)
 
 
+def avg(vals):
+    if not vals:
+        return
+    return sum(vals) / len(vals)
+
+
 @app.route('/patients')
 def handle_get_patient_list():
+    if request.args.get('mock'):
+        return jsonify(get_mock_patient_list())
+
     return jsonify(get_patient_list(fhir))
 
 
 @app.route('/patients/<pat_id>')
 def handle_get_patient_detail(pat_id):
-    return jsonify(get_patient_detail(fhir, pat_id))
+    if request.args.get('mock'):
+        patient = get_mock_patient_detail(pat_id)
+    else:
+        patient = get_patient_detail(fhir, pat_id)
+
+    if patient is None:
+        abort(404)
+
+    return jsonify(compute_status(patient))
 
 
 PNEUMONIA_CODES = (
@@ -83,6 +104,76 @@ def parse_human_name(name):
         parts.extend(name.suffix)
 
     return ' '.join(parts) if len(parts) > 0 else None
+
+
+def compute_status(patient):
+    evidence = {
+        'heart_rate': None,
+        'respiratory_rate': None,
+        'temperature': None,
+        'pulse_ox': None,
+        'systolic_bp': None,
+        'mental_status': None,
+        'eating_status': None,
+    }
+
+    status = 'Yes'
+
+    if patient['heart_rate']:
+        val = avg([x['value'] for x in patient['heart_rate']])
+        evidence['heart_rate'] = val
+        if val > 100:
+            status = 'No'
+    else:
+        status = 'Maybe'
+
+    if patient['respiratory_rate']:
+        val = avg([x['value'] for x in patient['respiratory_rate']])
+        evidence['respiratory_rate'] = val
+        if val > 24:
+            status = 'No'
+    else:
+        status = 'Maybe'
+
+    if patient['temperature']:
+        val = avg([x['value'] for x in patient['temperature']])
+        evidence['temperature'] = val
+        if val > 37.7:
+            status = 'No'
+    else:
+        status = 'Maybe'
+
+    if patient['pulse_ox']:
+        val = avg([x['value'] for x in patient['pulse_ox']])
+        evidence['pulse_ox'] = val
+        if val < 90:
+            status = 'No'
+    else:
+        status = 'Maybe'
+
+    if patient['systolic_bp']:
+        val = avg([x['value'] for x in patient['systolic_bp']])
+        evidence['systolic_bp'] = val
+        if val < 90:
+            status = 'No'
+    else:
+        status = 'Maybe'
+
+    evidence['status'] = status
+    out = dict(patient)
+    out.update(evidence)
+
+    return out
+
+
+# Returns a mock set of patients.
+def get_mock_patient_list():
+    return tuple(mock_patients.values())
+
+
+# Returns a mock patient detail by id.
+def get_mock_patient_detail(pat_id):
+    return mock_patients.get(pat_id)
 
 
 # Get the full set of patients with CAP who have not been discharged.
