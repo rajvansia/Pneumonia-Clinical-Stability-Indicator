@@ -26,6 +26,12 @@ def load_data():
                 'name': 'Patient {}'.format(i),
                 'birth_date': '1962-04-10',
                 'gender': i % 2 == 0 and 'Male' or 'Female',
+                'conditions': [{
+                    'code': '233604007',
+                    'display': 'Pneumonia',
+                    'onset': records[0][0],
+                    'system': 'http://snomed.info/sct'
+                }],
                 'heart_rate': [{
                     'time': date,
                     'value': float(x[2]),

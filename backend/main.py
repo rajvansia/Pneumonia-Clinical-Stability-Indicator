@@ -168,7 +168,13 @@ def compute_status(patient):
 
 # Returns a mock set of patients.
 def get_mock_patient_list():
-    return tuple(mock_patients.values())
+    return [{
+        'birth_date': x['birth_date'],
+        'conditions': x['conditions'],
+        'gender': x['gender'],
+        'id': x['id'],
+        'name': x['name']
+    } for x in mock_patients.values()]
 
 
 # Returns a mock patient detail by id.
