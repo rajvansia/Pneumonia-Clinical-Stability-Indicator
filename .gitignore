@@ -1,4 +1,6 @@
 *.sw?
 *.py?
 __pycache__
+node_modules
 py3
+node_modules
