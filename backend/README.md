@@ -2,7 +2,7 @@
 
 ## Install
 
-Testes on Python 3.4+
+Tested on Python 3.4+
 
 ```
 pip install -r requirements.txt
@@ -27,7 +27,23 @@ Use them by setting them inline:
 DEBUG=1 PORT=6000 python main.py
 ```
 
+### Docker
+
+Build the image.
+
+```
+docker built -t nopressure/backend .
+```
+
+Run a container.
+
+```
+docker run --rm -it -p 5000:5000 nopressure/backend
+```
+
 ## Endpoints
 
 - `/patients` - Get a list of all patients with Pneumonia.
-- `/patients/<id>` - Get vital signs, mental, and eating status for a patient.
+- `/patients/<id>` - Get the staibility, vital signs, mental, and eating status for a patient.
+
+Add `?mock=1` to the URL to get the built-in mock patients.

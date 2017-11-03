@@ -56,8 +56,8 @@ Query for patient details:
 
 ## Model
 
-TODO
+The model has been implemented on the backend. Accessing a specific patient's detail page will compute the stability of the patient based on the last 24 hours of vital sign data.
 
 ## Frontend
 
-The frontend uses React to create reusable UI components. The frontend will retrive patient data such as vital signs and CAP recomendation from the backend. With this data it will pass into React UI components.  Utalizing React makes it easier to update state of the application to seamlessly update the UI components when new vitals/recommendation data comes in. 
+The frontend uses React to create reusable UI components. The frontend will retrive patient data such as vital signs and CAP recomendation from the backend. With this data it will pass into React UI components.  Utalizing React makes it easier to update state of the application to seamlessly update the UI components when new vitals/recommendation data comes in.
