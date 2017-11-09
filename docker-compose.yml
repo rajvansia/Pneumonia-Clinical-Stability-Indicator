@@ -1,0 +1,14 @@
+version: "3.2"
+
+services:
+  backend:
+    build: backend
+    restart: always
+    ports:
+      - 5839:5000
+
+  frontend:
+    build: frontend
+    restart: always
+    ports:
+      - 5931:5000
