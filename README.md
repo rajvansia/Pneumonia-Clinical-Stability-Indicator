@@ -28,18 +28,17 @@ The public ports are in the `docker-compose.yml` including `5839` for the backen
       - heart rate > 100
       - respiratory rate > 24
 
-
-
 ## Usage
 
 - Go to http://localhost:5931 in your browser to view the frontend.
 - View an API endpoint by going to http://localhost:5839/patients.
+- View the FHIR server frontend by going to http://localhost:8080
 
 ## Architecture
 
-The *backend* talks to the FHIR server and encapsulates the logic for identifying relevant patients and resources. For each patient, the data are passed into the *model* which applies the expert rules to determine if a CAP patient is "clinically stable". The result of this is augmented onto the data payload and then sent to *frontend* which renders the information.
-
 ## Backend
+
+The *backend* talks to the FHIR server and encapsulates the logic for identifying relevant patients and resources. For each patient, the data are passed into the *model* which applies the expert rules to determine if a CAP patient is "clinically stable". The result of this is augmented onto the data payload and then sent to *frontend* which renders the information.
 
 ## Model
 
