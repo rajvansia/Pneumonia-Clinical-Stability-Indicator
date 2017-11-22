@@ -8,56 +8,19 @@ from fhirclient.client import FHIRClient
 from fhirclient.models.observation import Observation
 from fhirclient.models.patient import Patient
 from fhirclient.models.condition import Condition
-import mock
-
-mock_patients = mock.load_data()
 
 
-GATECH_FHIR_API_URL = 'http://fhirtesting.hdap.gatech.edu/hapi-fhir-jpaserver-example/baseDstu3'
-FHIR_TEST_API_URL = 'http://fhirtest.uhn.ca/baseDstu3'
-
-FHIR_API_URL = os.environ.get('FHIR_API_URL', FHIR_TEST_API_URL)
-APP_ID = 'team_no_pressure'
-
-# Client to FHIR server.
-fhir = FHIRClient(settings={
-    'app_id': APP_ID,
-    'api_base': FHIR_API_URL,
-})
+# Reference date to pin queries to. Since calculations are
+# based on a 24-hour sliding window, this is required for
+# static data, i.e. a non-live system where new observations
+# are *not* being recorded.
+REF_DATE = os.environ.get('FHIR_REF_DATE')
+if REF_DATE:
+    REF_DATE = datetime.strptime(REF_DATE, '%Y-%m-%d')
 
 
-# Web server and resources. All logic is separate. The handlers
-# simply translate the data and/or exceptions into the appropriate
-# HTTP response.
-app = Flask(__name__)
-CORS(app)
-
-
-def avg(vals):
-    if not vals:
-        return
-    return sum(vals) / len(vals)
-
-
-@app.route('/patients')
-def handle_get_patient_list():
-    if request.args.get('mock'):
-        return jsonify(get_mock_patient_list())
-
-    return jsonify(get_patient_list(fhir))
-
-
-@app.route('/patients/<pat_id>')
-def handle_get_patient_detail(pat_id):
-    if request.args.get('mock'):
-        patient = get_mock_patient_detail(pat_id)
-    else:
-        patient = get_patient_detail(fhir, pat_id)
-
-    if patient is None:
-        abort(404)
-
-    return jsonify(compute_status(patient))
+# FHIR server env variable required.
+FHIR_API_URL = os.environ['FHIR_API_URL']
 
 
 PNEUMONIA_CODES = (
@@ -74,19 +37,59 @@ PNEUMONIA_CODES = (
     'J15.1',
 )
 
+MEDICATIONS_RXNORM = (
+    ## fluoroquinolones: https://en.wikipedia.org/wiki/Quinolone_antibiotic#Generations
+    # ciprofloxacin
+    '2551',
+    # levofloxacin
+    '82122',
+    # moxifloxacin
+    '139462',
+    # gemifloxacin
+    '138099',
+    # norfloxacin
+    '7517',
+    # ofloxacin
+    '7623',
+
+    ## macrolide: https://en.wikipedia.org/wiki/Macrolide#Antibiotic_macrolides
+    # azithromycin
+    '18631',
+    # clarithromycin
+    '21212',
+    # erythromycin
+    '4053',
+    # fidaxomicin
+    '1111103',
+    # telithromycin
+    '274786',
+
+    # doxycycline
+    '3640',
+)
+
 LOINC_SYSTEM = 'http://loinc.org'
 
 LOINC_BP = '55284-4'
 LOINC_SBP = '8480-6'
+LOINC_DBP = '8462-4'
 LOINC_HR = '8867-4'
 LOINC_RR = '9279-1'
 LOINC_TEMP = '8310-5'
 LOINC_O2 = '59408-5'
 
+VITAL_SIGNS_CATEGORY = 'vital-signs'
 
+
+def avg(vals):
+    if not vals:
+        return
+    return sum(vals) / len(vals)
+
+
+# Taken and modified from the FHIR python client.
 def parse_human_name(name):
-    """ Formats a `HumanName` instance into a string.
-    """
+    "Formats a `HumanName` instance into a string."
     if name is None:
         return
 
@@ -106,80 +109,87 @@ def parse_human_name(name):
     return ' '.join(parts) if len(parts) > 0 else None
 
 
-def compute_status(patient):
+# Compute the status of the patient by averaging the available
+# observation values for each relevant type. The averaged value
+# is returned along with the 'stable' characterization as Yes,
+# No, or Maybe. Maybe is used when it is not *No* and there is
+# missing data.
+def compute_status(measures):
     evidence = {
         'heart_rate': None,
         'respiratory_rate': None,
         'temperature': None,
         'pulse_ox': None,
         'systolic_bp': None,
+        'diastolic_bp': None,
         'mental_status': None,
         'eating_status': None,
     }
 
-    status = 'Yes'
+    stable = 'Yes'
+    indicator = []
 
-    if patient['heart_rate']:
-        val = avg([x['value'] for x in patient['heart_rate']])
+    if measures['heart_rate']:
+        val = avg([x['value'] for x in measures['heart_rate']])
         evidence['heart_rate'] = val
         if val > 100:
-            status = 'No'
+            stable = 'No'
+            indicator.append('heart rate > 100')
     else:
-        status = 'Maybe'
+        stable = 'Maybe'
 
-    if patient['respiratory_rate']:
-        val = avg([x['value'] for x in patient['respiratory_rate']])
+    if measures['respiratory_rate']:
+        val = avg([x['value'] for x in measures['respiratory_rate']])
         evidence['respiratory_rate'] = val
         if val > 24:
-            status = 'No'
+            stable = 'No'
+            indicator.append('respiratory rate > 24')
     else:
-        status = 'Maybe'
+        stable = 'Maybe'
 
-    if patient['temperature']:
-        val = avg([x['value'] for x in patient['temperature']])
+    if measures['temperature']:
+        val = avg([x['value'] for x in measures['temperature']])
         evidence['temperature'] = val
         if val > 37.7:
-            status = 'No'
+            stable = 'No'
+            indicator.append('temperature > 37.7')
     else:
-        status = 'Maybe'
+        stable = 'Maybe'
 
-    if patient['pulse_ox']:
-        val = avg([x['value'] for x in patient['pulse_ox']])
+    if measures['pulse_ox']:
+        val = avg([x['value'] for x in measures['pulse_ox']])
         evidence['pulse_ox'] = val
         if val < 90:
-            status = 'No'
+            stable = 'No'
+            indicator.append('pulse ox < 90')
     else:
-        status = 'Maybe'
+        stable = 'Maybe'
 
-    if patient['systolic_bp']:
-        val = avg([x['value'] for x in patient['systolic_bp']])
-        evidence['systolic_bp'] = val
+    if measures['blood_pressure']:
+        sval = []
+        dval = []
+        for bp in measures['blood_pressure']:
+            if bp['systolic']:
+                sval.append(bp['systolic']['value'])
+            if bp['diastolic']:
+                dval.append(bp['diastolic']['value'])
+
+        sval = avg(sval)
+        dval = avg(dval)
+
+        evidence['systolic_bp'] = sval
+        evidence['diastolic_bp'] = dval
+
         if val < 90:
-            status = 'No'
+            stable = 'No'
+            indicator.append('systolic bp < 90')
     else:
-        status = 'Maybe'
+        stable = 'Maybe'
 
-    evidence['status'] = status
-    out = dict(patient)
-    out.update(evidence)
+    evidence['stable'] = stable
+    evidence['indicators'] = indicator
 
-    return out
-
-
-# Returns a mock set of patients.
-def get_mock_patient_list():
-    return [{
-        'birth_date': x['birth_date'],
-        'conditions': x['conditions'],
-        'gender': x['gender'],
-        'id': x['id'],
-        'name': x['name']
-    } for x in mock_patients.values()]
-
-
-# Returns a mock patient detail by id.
-def get_mock_patient_detail(pat_id):
-    return mock_patients.get(pat_id)
+    return evidence
 
 
 # Get the full set of patients with CAP who have not been discharged.
@@ -197,13 +207,19 @@ def get_patient_list(fhir):
     # Index of conditions by patient reference.
     conditions = defaultdict(list)
     patients = []
+    onset_dates = {}
 
     # Implicitly fetches pages on demand.
     for r in search.perform_resources(fhir.server):
         if r.resource_type == 'Condition':
+            ref = r.subject.reference
+
             c = r.code.coding[0]
 
-            conditions[r.subject.reference].append({
+            if ref not in onset_dates or r.onsetDateTime.date < onset_dates[ref]:
+                onset_dates[ref] = r.onsetDateTime
+
+            conditions[ref].append({
                 'onset': r.onsetDateTime.isostring,
                 'code': c.code,
                 'system': c.system,
@@ -213,13 +229,20 @@ def get_patient_list(fhir):
         elif r.resource_type == 'Patient':
             ref = 'Patient/' + r.id
 
-            patients.append({
-                'id': r.id,
-                'name': parse_human_name(r.name[0]),
-                'birth_date': r.birthDate.isostring,
-                'gender': r.gender,
-                'conditions': conditions[ref],
-            })
+            if REF_DATE:
+                ref_date = REF_DATE
+            else:
+                ref_date = datetime.now()
+
+            p = get_patient_detail(fhir, r.id)
+            p['conditions'] = conditions[ref]
+            p['length_of_stay'] = (ref_date.date() - onset_dates[ref].date).days
+            m = p.pop('measures')
+            p['status'] = compute_status(m)
+            patients.append(p)
+
+            # Reset.
+            min_onset_date = None
 
     return patients
 
@@ -229,19 +252,25 @@ def get_patient_list(fhir):
 def get_patient_detail(fhir, pat_id):
     pat = Patient.read(pat_id, fhir.server)
 
+    # If set, use this to query on a fixed time point.
+    if REF_DATE:
+        ref_date = REF_DATE
+    else:
+        ref_date = datetime.now()
+
     # Only the last 24 hours are considered.
-    past24 = datetime.now() - timedelta(days=1)
+    past24 = ref_date - timedelta(days=1)
 
     # Vital signs for the patient. Includes SBP, HR, RR, satO2, temp
     search = Observation.where(struct={
         'subject': pat_id,
-        'category': 'vital-signs',
+        'category': VITAL_SIGNS_CATEGORY,
         'date': {
-            '$gte': past24.strftime('%Y-%m-%dT%H:%M:%S'),
+            '$gte': past24.strftime('%Y-%m-%dT%H:%M:%SZ'),
         },
     })
 
-    sbp = []
+    bp = []
     hr = []
     rr = []
     temp = []
@@ -250,64 +279,117 @@ def get_patient_detail(fhir, pat_id):
     # Implicitly fetches pages on demand.
     for r in search.perform_resources(fhir.server):
         # Resource code.
-        system = r.code.coding.system
-        code = r.code.coding.code
+        system = r.code.coding[0].system
+        code = r.code.coding[0].code
 
         if system != LOINC_SYSTEM:
             continue
 
         # Extract systolic component from blood pressure.
         if code == LOINC_BP:
+            sbp = None
+            dbp = None
+
             for c in r.component:
-                if c.code.coding.code  == LOINC_SBP:
-                    sbp.append({
-                        'time': r.effectiveDateTime,
+                if c.code.coding[0].code == LOINC_SBP:
+                    sbp = {
+                        'time': r.effectiveDateTime.isostring,
                         'value': c.valueQuantity.value,
                         'unit': c.valueQuantity.unit,
-                    })
-                    break
+                    }
+                elif c.code.coding[0].code == LOINC_DBP:
+                    dbp = {
+                        'time': r.effectiveDateTime.isostring,
+                        'value': c.valueQuantity.value,
+                        'unit': c.valueQuantity.unit,
+                    }
+
+            if sbp or dbp:
+                bp.append({
+                    'systolic': sbp,
+                    'diastolic': dbp,
+                })
 
         elif code == LOINC_HR:
             hr.append({
-                'time': r.effectiveDateTime,
+                'time': r.effectiveDateTime.isostring,
                 'value': r.valueQuantity.value,
                 'unit': r.valueQuantity.unit,
             })
 
         elif code == LOINC_RR:
             rr.append({
-                'time': r.effectiveDateTime,
+                'time': r.effectiveDateTime.isostring,
                 'value': r.valueQuantity.value,
                 'unit': r.valueQuantity.unit,
             })
 
         elif code == LOINC_TEMP:
             temp.append({
-                'time': r.effectiveDateTime,
+                'time': r.effectiveDateTime.isostring,
                 'value': r.valueQuantity.value,
                 'unit': r.valueQuantity.unit,
             })
 
         elif code == LOINC_O2:
-            os2.append({
-                'time': r.effectiveDateTime,
+            o2.append({
+                'time': r.effectiveDateTime.isostring,
                 'value': r.valueQuantity.value,
                 'unit': r.valueQuantity.unit,
             })
 
+    mrn = None
+    if pat.identifier:
+        mrn = pat.identifier[0].value
+
     return {
         'id': pat_id,
+        'mrn': mrn,
         'name': parse_human_name(pat.name[0]),
         'birth_date': pat.birthDate.isostring,
         'gender': pat.gender,
-        'heart_rate': hr,
-        'respiratory_rate': rr,
-        'temperature': temp,
-        'pulse_ox': o2,
-        'systolic_bp': sbp,
-        'mental_status': None,
-        'eating_status': None,
+        'measures': {
+            'heart_rate': hr,
+            'respiratory_rate': rr,
+            'temperature': temp,
+            'pulse_ox': o2,
+            'blood_pressure': bp,
+            'mental_status': None,
+            'eating_status': None,
+        },
     }
+
+
+# Client to FHIR server.
+fhir = FHIRClient(settings={
+    'app_id': 'team_no_pressure',
+    'api_base': FHIR_API_URL,
+})
+
+
+# Web server and resources. All logic is separate. The handlers
+# simply translate the data and/or exceptions into the appropriate
+# HTTP response.
+app = Flask(__name__)
+CORS(app)
+
+
+# Get a list of patients that have pneumonia and are active.
+@app.route('/patients')
+def handle_get_patient_list():
+    return jsonify(get_patient_list(fhir))
+
+
+# Get the detail of patient by ID.
+@app.route('/patients/<pat_id>')
+def handle_get_patient_detail(pat_id):
+    p = get_patient_detail(fhir, pat_id)
+
+    if p is None:
+        abort(404)
+
+    p['status'] = compute_status(p['measures'])
+    return jsonify(p)
 
 
 if __name__ == '__main__':

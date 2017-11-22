@@ -1,58 +1,45 @@
 # Community-Acquired-Pneumonia-Clinical-Stability-Indicator
 
-Community Acquired Pneumonia Clinical Stability Indicator #15
+Community Acquired Pneumonia Clinical Stability Indicator (Project #15)
+
+## Demo
+
+This will fetch Docker images in the frontend/ and backend/ directories and takes a few minutes.
+
+```
+docker-compose up
+```
+
+The public ports are in the `docker-compose.yml` including `5839` for the backend and `5931` for the frontend. If the backend port needs to change, an additional file needs to change in the frontend prior to building the containers (since it depends on the URL from the browser). Edit the port listed in frontend/src/
+
+### Test Patients
+
+- Amy Shaw - http://localhost:5839/patients/np-2
+  - Active: true
+  - Length of stay: 4 days
+  - Clinically stable: No
+    - respiratory rate > 24
+
+- Jon Doe - http://localhost:5839/patients/np-2
+  - Active: true
+  - Length of stay: 1 day
+  - Clinically stable: No
+      - temperature > 37.7
+      - heart rate > 100
+      - respiratory rate > 24
+
+
+
+## Usage
+
+- Go to http://localhost:5931 in your browser to view the frontend.
+- View an API endpoint by going to http://localhost:5839/patients.
 
 ## Architecture
 
 The *backend* talks to the FHIR server and encapsulates the logic for identifying relevant patients and resources. For each patient, the data are passed into the *model* which applies the expert rules to determine if a CAP patient is "clinically stable". The result of this is augmented onto the data payload and then sent to *frontend* which renders the information.
 
 ## Backend
-
-### Logic
-
-Inclusion criteria for CAP patients:
-
-- Has one of:
-  - SNOMED CT: 385093006
-- Clinically active
-- Patient active (not deceased)
-
-### Data
-
-Query for all CAP patients:
-
-- patient id
-- onset/admission date
-
-Query for patient details:
-
-- patient id
-- onset/admission date
-- vital signs
-  - last 24 hours
-  - includes
-    - [systolic blood pressure](https://www.hl7.org/fhir/observation-example-bloodpressure.html)
-        - LOINC: 8480-6
-        - `/Observation?component-code=8480-6`
-          - *Component of blood pressure*
-    - [heart rate](https://www.hl7.org/fhir/observation-example-heart-rate.html)
-        - LOINC: 8867-4
-        - `/Observation?code=8867-4`
-    - [respiratory rate](https://www.hl7.org/fhir/observation-example-respiratory-rate.html)
-        - LOINC: 9279-1
-        - `/Observation?code=9279-1`
-    - [temperature](https://www.hl7.org/fhir/observation-example-body-temperature.html)
-        - LOINC: 8310-5
-        - `/Observation?code=8310-5`
-    - [pulse ox](https://www.hl7.org/fhir/observation-example-satO2.html)
-        - LOINC: 59408-5
-        - `/Observation?code=59408-5`
-- ability to eat
-  - last 24 hours
-  - TODO
-- mental status
-  - last 24 hours
-  - TODO
 
 ## Model
 
