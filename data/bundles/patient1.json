@@ -1,0 +1,561 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Patient/np-1"
+      },
+      "resource": {
+        "active": true,
+        "birthDate": "2007-03-20",
+        "gender": "female",
+        "id": "np-1",
+        "name": [
+          {
+            "family": "Shaw",
+            "given": [
+              "Amy",
+              "V"
+            ],
+            "use": "official"
+          }
+        ],
+        "identifier": [
+          {
+            "use": "official",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/v2/0203",
+                  "code": "MR",
+                  "display": "Medical Record Number"
+                }
+              ],
+              "text": "Medical Record Number"
+            },
+            "system": "http://hospital.smarthealthit.org",
+            "value": "12081332"
+          }
+        ],
+        "resourceType": "Patient"
+      },
+      "fullUrl": "/Patient/np-1"
+    },
+
+
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Medication/np-medication-1"
+      },
+      "resource": {
+        "resourceType": "Medication",
+        "id": "np-medication-1",
+        "status": "active",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "code": {
+          "coding": [
+            {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "824184",
+            "display": " Amoxicillin 250 MG / Clavulanate 125 MG [Augmentin]"
+            }
+          ]
+        }
+      },
+      "fullUrl": "/Medication/np-medication-1"
+    },
+
+
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Condition/np-condition-1"
+      },
+      "resource": {
+        "resourceType": "Condition",
+        "id": "np-condition-1",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "233604007",
+              "display": "Pneumonia"
+            }
+          ]
+        },
+        "clinicalStatus": "active",
+        "verificationStatus": "confirmed",
+        "onsetDateTime": "2007-12-10"
+      },
+      "fullUrl": "/Condition/np-condition-1"
+    },
+
+
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-1"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-1",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "heart_rate"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T08:31:22Z",
+        "valueQuantity": {
+          "value": 78,
+          "unit": "bpm",
+          "system": "http://unitsofmeasure.org",
+          "code": "bpm"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-2"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-2",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "heart_rate"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T09:30:22Z",
+        "valueQuantity": {
+          "value": 84,
+          "unit": "bpm",
+          "system": "http://unitsofmeasure.org",
+          "code": "bpm"
+        }
+      }
+    },
+
+
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-3"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-3",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "59408-5",
+              "display": "Oxygen saturation in Arterial blood by Pulse oximetry"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T08:32:11Z",
+        "valueQuantity": {
+          "value": 99.0,
+          "unit": "%O2"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-4"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-4",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "59408-5",
+              "display": "Oxygen saturation in Arterial blood by Pulse oximetry"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T09:35:32Z",
+        "valueQuantity": {
+          "value": 110.4,
+          "unit": "%O2"
+        }
+      }
+    },
+
+
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-5"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-5",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8310-5",
+              "display": "Body temperature"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T08:38:11Z",
+        "valueQuantity": {
+          "value": 37.1,
+          "unit": "C"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-6"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-6",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8310-5",
+              "display": "Body temperature"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T09:39:32Z",
+        "valueQuantity": {
+          "value": 37.4,
+          "unit": "C"
+        }
+      }
+    },
+
+
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-7"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-7",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "55284-4",
+              "display": "Blood pressure systolic & diastolic"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T08:38:11Z",
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8480-6",
+                  "display": "Systolic blood pressure"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "value": 107,
+              "unit": "mmHg"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8462-4",
+                  "display": "Diastolic blood pressure"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "value": 60,
+              "unit": "mmHg"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-8"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-8",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "55284-4",
+              "display": "Blood pressure systolic & diastolic"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T09:39:32Z",
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8480-6",
+                  "display": "Systolic blood pressure"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "value": 113,
+              "unit": "mmHg"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8462-4",
+                  "display": "Diastolic blood pressure"
+                }
+              ]
+            },
+            "valueQuantity": {
+              "value": 65,
+              "unit": "mmHg"
+            }
+          }
+        ]
+      }
+    },
+
+
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-9"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-9",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "9279-1",
+              "display": "Respiratory rate"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T08:39:11Z",
+        "valueQuantity": {
+          "value": 33,
+          "unit": "resp/min"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "Observation/np-obs-10"
+      },
+      "resource": {
+        "status": "unknown",
+        "resourceType": "Observation",
+        "id": "np-obs-10",
+        "subject": {
+          "reference": "Patient/np-1"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "9279-1",
+              "display": "Respiratory rate"
+            }
+          ]
+        },
+        "effectiveDateTime": "2007-12-14T09:40:32Z",
+        "valueQuantity": {
+          "value": 35,
+          "unit": "resp/min"
+        }
+      }
+    }
+  ]
+}
