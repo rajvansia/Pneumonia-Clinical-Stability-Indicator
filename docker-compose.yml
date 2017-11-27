@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   backend:
-    build: backend
+    image: bruth/np-backend
     restart: always
     ports:
       - 5839:5000
@@ -17,8 +17,7 @@ services:
       - 5931:5000
 
   postgres:
-    # image: bruth/np-fhir-postgres
-    image: postgres
+    image: bruth/np-fhir-postgres
     restart: always
     ports:
        - 5432:5432
@@ -27,7 +26,7 @@ services:
        - POSTGRES_USER=postgres
 
   fhir:
-    image: bruth/np-fhir-server:latest
+    image: bruth/np-fhir-server
     restart: always
     ports:
        - 8080:8080
