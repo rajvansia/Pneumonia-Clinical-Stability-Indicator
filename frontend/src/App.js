@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer';
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route,BrowserRouter } from 'react-router-dom'
 import MenuItem from 'material-ui/MenuItem';
 import { cyan500, pinkA200 } from 'material-ui/styles/colors';
 import {green100, green500, green700} from 'material-ui/styles/colors';
@@ -34,23 +34,27 @@ const styles = {
 
 };
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {open: false};
-  }
-  handleToggle = () => this.setState({open: !this.state.open});
-  handleClose = () => this.setState({open: false});
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {open: false};
+  // }
+  // handleToggle = () => this.setState({open: !this.state.open});
+  // handleClose = () => this.setState({open: false});
 
   render() {
     return (
+      <BrowserRouter>
 
       <Switch>
-          <Route exact path='/' component={PatientDetail}/>
+          <Route exact path='/' component={Main}/>
            <Route  path='/PatientDetail' component={PatientDetail}/>
            <Route path='/PatientList' component={Main}/>
-             <Route path="/:userName" render={(props) => <PatientDetail {...props}/>}/>
+           <Route path='/Card' component={Card}/>
+            <Route path="/:userName" render={(props) => <PatientDetail {...props}/>}/>
 
          </Switch>
+       </BrowserRouter>
+
     );
   }
 }

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import logo from './logo.svg';
 import './App.css';
 import AppBar from 'material-ui/AppBar'
+import { connect } from 'react-redux';
+import {patientSelected} from './actions/index.js';
+
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import { cyan500, pinkA200 } from 'material-ui/styles/colors';
@@ -30,21 +35,24 @@ const styles = {
 
 };
 class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {open: false};
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {open: false};
+  // }
+    componentDidMount() {
+    this.props.dispatch(patientSelected())
   }
-  handleToggle = () => this.setState({open: !this.state.open});
-  handleClose = () => this.setState({open: false});
+  //   handleToggle = () => this.setState({open: !this.state.open});
+  // handleClose = () => this.setState({open: false});
 
   render() {
+    const {patient} = this.props
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
       <div>
 <NavBar />
       <div className="App">
-        <Card>
-        </Card>
+        <Card data={patient}/>
         <header styles={styles.footer}>
           <h6 className="App-title"></h6>
         </header>
@@ -56,4 +64,11 @@ class Main extends Component {
   }
 }
 
-export default Main;
+
+const mapStateToProps = ({ patient}) => ({
+
+  patient:patient.patients,
+
+});
+
+export default connect(mapStateToProps)(Main);

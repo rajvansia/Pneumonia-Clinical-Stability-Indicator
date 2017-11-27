@@ -7,8 +7,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { cyan500, pinkA200 } from 'material-ui/styles/colors';
 import {green100, green500, green700} from 'material-ui/styles/colors';
 import PatientDem from './PatientDem.js'
+import { Link, withRouter } from 'react-router-dom'
+import {patientSelected} from '../actions/index.js';
 
-const data = [{id:'SMART-9995679', mrn:"12345", age:"44", fullname:"John Van", stability: "Unstable", temp:'98', sys:"140", dia:"77", sp:"95", rr:"22"},{id:'SMART-9995679', mrn:"53126", age:"32", fullname:"Jim Jones", stability: "Stable",  temp:'96', sys:"120", dia:"80", sp:"100", rr:"13"},{id:'SMART-9995679', mrn:"54436", age:"43", fullname:"Kat Kim", stability: "Unstable",  temp:'96', sys:"124", dia:"77", sp:"99", rr:"12"},{id:'SMART-9995679', mrn:"502936", age:"57", fullname:"Mary Lin", stability: "Stable",  temp:'95', sys:"134", dia:"67", sp:"95", rr:"14"}];
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: cyan500,
@@ -29,32 +30,28 @@ const styles = {
 
 };
 
-class Card extends Component {
-  constructor() {
-      super();
-    this.state = {
-      inputValue : ''
-    }
-    }
+const Card = ({ data}) => (
+
+    //
+    //   componentDidMount() {
+    //   this.props.dispatch(patientSelected("ok"))
+    // }
 
 //dispatch a login and logut action.
 
-  render() {
+    <div>
 
-    return (
-      <div style={styles.overall}>
-        {data.map((patient) =>
+    {data? <div style={styles.overall}>
+        {data.map((s) =>
 
-        <PatientDem  mrn={patient.mrn} age={patient.age} fullname={patient.fullname} stability={patient.stability}  rr={patient.rr} temp={patient.temp} sp={patient.sp} dia={patient.dia} sys={patient.sys}/>
+        <PatientDem patient={s}/>
 
       )}
 
 
-      </div>
+      </div>: 'loading ....'}
+    </div>
 
-    );
-  }
-}
-
+    )
 
 export default Card;

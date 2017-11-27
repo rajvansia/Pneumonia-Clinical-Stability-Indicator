@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../App.css';
 import AppBar from 'material-ui/AppBar'
+import IconButton from 'material-ui/IconButton'
+
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import { cyan500, pinkA200 } from 'material-ui/styles/colors';
@@ -42,9 +44,8 @@ render() {
     <MuiThemeProvider muiTheme={muiTheme}>
     <div>
 <AppBar
-title="CAP Predictor"
-iconClassNameRight="muidocs-icon-navigation-expand-more"
-onLeftIconButtonTouchTap={this.handleToggle}
+title="CAP Clinical Stability Predictor "
+iconElementLeft={<IconButton></IconButton>}
 />
 <Drawer
        docked={false}
@@ -52,13 +53,13 @@ onLeftIconButtonTouchTap={this.handleToggle}
        open={this.state.open}
        onRequestChange={(open) => this.setState({open})}
        >
-       <MenuItem onTouchTap={this.handleClose}>
+       <MenuItem >
           <Link style={styles.links} to='/'>Home</Link>
          </MenuItem>
-         <MenuItem onTouchTap={this.handleClose}>
+         <MenuItem >
            <Link style={styles.links}  to='/PatientList'>Patient List</Link>
          </MenuItem>
-          <MenuItem onTouchTap={this.handleClose}>
+          <MenuItem>
           <Link style={styles.links} to='/PatientDetail'>Patient Detail</Link>
           </MenuItem>
      </Drawer>

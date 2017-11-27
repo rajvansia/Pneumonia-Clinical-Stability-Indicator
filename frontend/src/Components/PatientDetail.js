@@ -10,6 +10,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Card from '../Components/Card.js'
 import PatientDem from "../Components/PatientDem.js"
 import NavBar from "../Components/NavBar.js"
+import ProgressNotes from "../Components/ProgressNotes.js"
+import { connect } from 'react-redux';
+
+
 
 import { Link, withRouter } from 'react-router-dom'
 
@@ -37,24 +41,31 @@ const styles = {
         // width:'50%',
     },
 };
-const PatientDetail = withRouter (({props})=> (
-
+const PatientDetail = withRouter (({patients})=> (
 
       <MuiThemeProvider muiTheme={muiTheme}>
       <div>
     <NavBar />
-      <div style={styles.overall}>
+    {patients!=null?    <div style={styles.overall}>
 
-        <PatientDem  mrn="9090" age="44" fullname="John Van" stability="Unstable"  rr="10" temp="99" sp="95" dia="66" sys="140"/>
 
+        <PatientDem days={patients.days} hr={patients.hr} rec={patients.rec} mrn={patients.mrn} age={patients.age} fullname={patients.fullname} stability={patients.stability}  rr={patients.rr} temp={patients.temp} sp={patients.sp} dia={patients.dia} sys={patients.sys}/>
+
+
+                <ProgressNotes />
         <header styles={styles.footer}>
           <h6 className="App-title"></h6>
         </header>
 
-      </div>
+      </div>: 'laoding'}
     </div>
   </MuiThemeProvider>
     )
-)
 
-export default PatientDetail;
+)
+const mapStateToProps = ({ patient}) => ({
+
+  patients:patient.patientDet,
+
+});
+export default  connect(mapStateToProps)(PatientDetail);
