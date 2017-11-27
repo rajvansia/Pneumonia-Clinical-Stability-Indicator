@@ -1,6 +1,6 @@
 # Community-Acquired-Pneumonia-Clinical-Stability-Indicator
 
-Community Acquired Pneumonia Clinical Stability Indicator (Project #15)
+Project #15
 
 ## Demo
 
@@ -15,18 +15,34 @@ The public ports are in the `docker-compose.yml` including `5839` for the backen
 ### Test Patients
 
 - Amy Shaw - http://localhost:5839/patients/np-2
-  - Active: true
+  - Condition: SNOMED-CT 233604007
+  - Status: active
   - Length of stay: 4 days
   - Clinically stable: No
     - respiratory rate > 24
 
 - Jon Doe - http://localhost:5839/patients/np-2
-  - Active: true
+  - Condition: SNOMED-CT 385093006
+  - Status: active
   - Length of stay: 1 day
   - Clinically stable: No
       - temperature > 37.7
       - heart rate > 100
       - respiratory rate > 24
+
+- Robert Smith - http://localhost:5839/patients/np-3
+  - Condition: ICD-10 J18.9
+  - Status: active
+  - Length of say: 5 days
+  - Clinically stable: Yes
+
+- Dana Lee - http://localhost:5839/patients/np-4
+  - Condition: ICD-10 J18.0
+  - Status: resolved
+  - Clinically stable: Yes
+
+- Harper Miller - http://localhost:5839/patients/np-5
+  - Condition: No match (control)
 
 ## Usage
 
