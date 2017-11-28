@@ -1,12 +1,18 @@
-export const BLOOD = 'BLOOD';
-export function blood(id){
+
+export const PATIENT_DELETED = 'PATIENT_DELETED';
+export function patientDeleted(patient){
   return{
-type: BLOOD,
-id
+    type: PATIENT_DELETED,
+    patient
   }
 }
-
-
+export const PATIENTDELETE = 'PATIENTDELETE';
+export function deletePatient(patient){
+  return{
+type: PATIENTDELETE,
+patient
+  }
+}
 export const PATIENTUPDATE = 'PATIENTUPDATE';
 export function updatePatient(patient){
   return{

@@ -12,7 +12,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Card from './Components/Card.js'
 import PatientDem from "./Components/PatientDem.js"
 import Main from "./Main.js"
-import PatientDetail from "./Components/PatientDetail.js"
 import NavBar from "./Components/NavBar.js"
 
 
@@ -34,12 +33,6 @@ const styles = {
 
 };
 class App extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {open: false};
-  // }
-  // handleToggle = () => this.setState({open: !this.state.open});
-  // handleClose = () => this.setState({open: false});
 
   render() {
     return (
@@ -47,11 +40,8 @@ class App extends Component {
 
       <Switch>
           <Route exact path='/' component={Main}/>
-           <Route  path='/PatientDetail' component={PatientDetail}/>
            <Route path='/PatientList' component={Main}/>
            <Route path='/Card' component={Card}/>
-            <Route path="/:userName" render={(props) => <PatientDetail {...props}/>}/>
-
          </Switch>
        </BrowserRouter>
 

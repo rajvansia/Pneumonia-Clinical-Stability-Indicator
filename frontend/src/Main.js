@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import './App.css';
 import AppBar from 'material-ui/AppBar'
 import { connect } from 'react-redux';
-import {patientSelected} from './actions/index.js';
+import {patientSelected, patientDeleted} from './actions/index.js';
 
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
@@ -35,15 +35,21 @@ const styles = {
 
 };
 class Main extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {open: false};
-  // }
-    componentDidMount() {
+  constructor() {
+    super();
+    this.deletePatient = this.deletePatient.bind(this);
+
+  }
+
+
+  componentDidMount() {
     this.props.dispatch(patientSelected())
   }
-  //   handleToggle = () => this.setState({open: !this.state.open});
-  // handleClose = () => this.setState({open: false});
+
+  deletePatient(id) {
+    console.log(id);
+    this.props.dispatch(patientDeleted(id));
+}
 
   render() {
     const {patient} = this.props
@@ -52,7 +58,10 @@ class Main extends Component {
       <div>
 <NavBar />
       <div className="App">
-        <Card data={patient}/>
+        <Card
+          data={patient}
+          onDeletePatient={this.deletePatient}
+/>
         <header styles={styles.footer}>
           <h6 className="App-title"></h6>
         </header>

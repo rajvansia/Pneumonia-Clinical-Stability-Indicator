@@ -30,24 +30,16 @@ const styles = {
 
 };
 
-const Card = ({ data}) => (
-
-    //
-    //   componentDidMount() {
-    //   this.props.dispatch(patientSelected("ok"))
-    // }
-
-//dispatch a login and logut action.
+const Card = ({ data, onDeletePatient}) => (
 
     <div>
 
     {data? <div style={styles.overall}>
         {data.map((s) =>
 
-        <PatientDem patient={s}/>
+        <PatientDem patient={s}   onDeletePatient={onDeletePatient}/>
 
       )}
-
 
       </div>: 'loading ....'}
     </div>

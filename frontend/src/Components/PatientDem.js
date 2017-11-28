@@ -9,7 +9,6 @@ import {green100, green500, green700} from 'material-ui/styles/colors';
 import NavBar from "../Components/NavBar.js"
 import { Link, withRouter } from 'react-router-dom'
 import {patientSelected} from '../actions/index.js';
-import PatientDetailButton from "../Components/PatientDetailButton.js"
 
 
 
@@ -21,7 +20,7 @@ const styles = {
           backgroundColor: 'rgb(98, 185, 255)',
           width: '60%',
           height: '20%',
-          overflow: 'hidden',
+          // overflow: 'hidden',
           boxShadow: '.25px .25px 5px .25px',
           borderRadius: '2px 2px 2px 2px',
           marginTop:"20px",
@@ -50,6 +49,12 @@ const styles = {
         color:"white",
         paddingLeft:"20px"
     },
+    buttonDel: {
+        fontSize:"15px",
+        zIndex:20,
+        marginLeft:"97%",
+        marginBottom:"0px"
+    },
     patientStay: {
         fontSize:"20px",
         color:"white",
@@ -76,6 +81,12 @@ const styles = {
         color:"white",
         background:"#524b4b",
         paddingLeft:"30px",
+
+    },
+    topBanner:{
+
+        background:"#524b4b",
+
 
     },
     vital: {
@@ -122,23 +133,30 @@ const styles = {
 
 
 
-const PatientDem = ({ patient}) => (
+const PatientDem = ({ patient, onDeletePatient}) => (
 
-        <button style={styles.main} className="Banner-header">
-          <div className="container vitalsDash">
+        // <button style={styles.main} className="Banner-header">
+          <div  style={styles.main} className="container vitalsDash">
                    <div className="row">
                   <div className="stuff">
+                    <div style={styles.topBanner}>
+                    <button style={styles.buttonDel} onClick={onDeletePatient.bind(this, patient.id)}>x</button>
+                    </div>
                           <div style={styles.name}>
-                                          <span stlye={styles.patientName}>{patient.name}</span>
-                                          <span style={styles.patientInfo}> Age:{patient.birth_date} MRN:23432</span>
-                                          <span style={"Clinically Stable"=="Clinically Stable" ? styles.patientStability : styles.patientUnstable} > Clinically Stable</span>
 
+                                          <span stlye={styles.patientName}>{patient.name}</span>
+                                          <span style={styles.patientInfo}> DOB: {patient.birth_date}   MRN: {patient.mrn}</span>
+                                            {patient.status.stable ==="No" &&
+                                                          <span style={styles.patientUnstable} > Clinically Not Stable</span>}
+
+                                            {patient.status.stable ==="Yes" &&
+                                                          <span style={styles.patientStability} > Clinically Stable</span>}
                                         </div>
 
                                         <div style={styles.vitalArea}>
                                           <div style={styles.vital}>
                                             <div>
-                                             {patient.systolic_bp}/122 <span style={styles.units}> mmHg </span>
+                                             {Math.ceil(patient.status.systolic_bp)}/{Math.ceil(patient.status.diastolic_bp)} <span style={styles.units}> mmHg </span>
                                            </div>
                                            <div>
                                             BP
@@ -146,7 +164,7 @@ const PatientDem = ({ patient}) => (
                                         </div>
                                            <div style={styles.vital}>
                                              <div>
-                                              {patient.heart_rate} <span style={styles.units}> BPM </span>
+                                              {Math.ceil(patient.status.heart_rate)} <span style={styles.units}> BPM </span>
                                             </div>
                                             <div>
                                              HR
@@ -154,7 +172,7 @@ const PatientDem = ({ patient}) => (
                                          </div>
                                          <div style={styles.vital}>
                                            <div>
-                                            {patient.respiratory_rate} <span style={styles.units}> BRPM </span>
+                                            {Math.ceil(patient.status.respiratory_rate)} <span style={styles.units}> BRPM </span>
                                           </div>
                                           <div>
                                            RR
@@ -162,7 +180,7 @@ const PatientDem = ({ patient}) => (
                                        </div>
                                             <span style={styles.vital}>
                                               <div>
-                                               {patient.temperature} <span style={styles.units}>F</span>
+                                               {Math.ceil(patient.status.temperature)} <span style={styles.units}>F</span>
                                              </div>
                                              <div>
                                               Temp
@@ -170,7 +188,7 @@ const PatientDem = ({ patient}) => (
                                              </span>
                                              <span style={styles.vital}>
                                                <div>
-                                                {patient.pulse_ox}<span style={styles.units}>%</span>
+                                                {Math.ceil(patient.status.pulse_ox)}<span style={styles.units}>%</span>
                                               </div>
                                               <div>
                                                SpO2
@@ -181,15 +199,17 @@ const PatientDem = ({ patient}) => (
 
                                                       </div>
                                                       <div style={styles.recomendation}>
-                                                                      <span style={styles.patientStay}>Length of Stay: {patient.days} days </span>
-                                                                        <span style={styles.patientRecomend}>Recommendation: {patient.rec} </span>
+                                                        {patient.length_of_stay ===1 &&
+                                                                      <span style={styles.patientStay}>Length of Stay: {patient.length_of_stay} day </span>}
+                                                        {patient.length_of_stay >1 &&
+                                                                      <span style={styles.patientStay}>Length of Stay: {patient.length_of_stay} days </span>}
 
                                                       </div>
 
                   </div>
                 </div>
                 </div>
-        </button>
+        // </button>
     );
 
 
