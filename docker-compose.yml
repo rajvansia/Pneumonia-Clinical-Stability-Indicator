@@ -11,7 +11,7 @@ services:
       FHIR_API_URL: "http://fhir:8080/baseDstu3"
 
   frontend:
-    build: frontend
+    image: bruth/np-frontend
     restart: always
     ports:
       - 5931:5000
