@@ -1,0 +1,36 @@
+version: "3.2"
+
+services:
+  backend:
+    image: bruth/np-backend
+    restart: always
+    ports:
+      - 5839:5000
+    environment:
+      FHIR_REF_DATE: "2007-12-14"
+      FHIR_API_URL: "http://fhir:8080/baseDstu3"
+
+  frontend:
+    image: bruth/np-frontend
+    restart: always
+    ports:
+      - 5931:5000
+
+  postgres:
+    image: bruth/np-fhir-postgres
+    restart: always
+    ports:
+       - 5432:5432
+    environment:
+       - POSTGRES_DB=fhir
+       - POSTGRES_USER=postgres
+
+  fhir:
+    image: bruth/np-fhir-server
+    restart: always
+    ports:
+       - 8080:8080
+    environment:
+       - JAVA_OPTIONS=-Dpostgres.host=postgres
+    depends_on:
+       - postgres
