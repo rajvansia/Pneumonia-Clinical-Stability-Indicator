@@ -1,5 +1,6 @@
 import pandas as pd
 import random as rd
+import sys
 
 days = 7
 patients = 5
@@ -16,10 +17,7 @@ data = {'data': date_range, 'temp': round(rd.uniform(37.7, 40), 2), 'hr': round(
         'sbp': round(rd.uniform(70, 90), 2), 'rr': round(rd.uniform(25, 30), 2), 'o2': round(rd.uniform(70, 90), 2)}
 
 df = pd.DataFrame(data, columns=['temp', 'hr', 'sbp', 'rr', 'o2'], index=date_range)
-print(df)
-
 days_to_clearance = rd.randint(3,7)
-print(days_to_clearance)
 
 temp_norm = 37.7
 hr_norm = 100
@@ -44,4 +42,9 @@ df_change = pd.DataFrame(change_data, columns=['temp', 'hr', 'sbp', 'rr', 'o2'],
 
 out = pd.DataFrame.round(df - df_change, 2)
 out.index.name = 'date'
-out.to_csv('patient5.csv')
+try:
+    out.to_csv(sys.argv[1])
+    print(df)
+except IndexError:
+    print("Please include a patient name.")
+    print("Proper Execution: python gen.py {patient_name}")
