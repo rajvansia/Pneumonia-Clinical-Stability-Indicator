@@ -164,7 +164,7 @@ const PatientDem = ({ patient, onDeletePatient}) => (
                                         </div>
                                            <div style={styles.vital}>
                                              <div>
-                                              {Math.ceil(patient.status.heart_rate)} <span style={styles.units}> BPM </span>
+                                              {Math.ceil(patient.status.heart_rate)} <span style={styles.units}></span>
                                             </div>
                                             <div>
                                              HR
@@ -172,7 +172,7 @@ const PatientDem = ({ patient, onDeletePatient}) => (
                                          </div>
                                          <div style={styles.vital}>
                                            <div>
-                                            {Math.ceil(patient.status.respiratory_rate)} <span style={styles.units}> BRPM </span>
+                                            {Math.ceil(patient.status.respiratory_rate)} <span style={styles.units}></span>
                                           </div>
                                           <div>
                                            RR
@@ -180,7 +180,7 @@ const PatientDem = ({ patient, onDeletePatient}) => (
                                        </div>
                                             <span style={styles.vital}>
                                               <div>
-                                               {Math.ceil(patient.status.temperature)} <span style={styles.units}>F</span>
+                                               {Math.ceil(patient.status.temperature)} <span style={styles.units}>C</span>
                                              </div>
                                              <div>
                                               Temp
