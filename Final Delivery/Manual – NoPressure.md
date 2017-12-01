@@ -185,7 +185,7 @@ The amount of time the patient has been admitted measured in days.
 
 **Deleting Patients**
 
-Once the clinician has taken action for an individual patient or once a patient has been discharged, the clinician can remove the patient from the patient list. To do so, the clinician can select the "X" button in the top right corner of the individual patient they wish to remove. This will remove the patient from the list of patients and the clinician can focus on their remaining patients.
+Once the clinician has taken action for an individual patient or once a patient has been discharged, the clinician can remove the patient from the patient list. To do so, the clinician can select the "X" button in the top right corner of the individual patient they wish to remove. This will remove the patient from the list of patients and the clinician can focus on their remaining patients. Note, deleting a patient does not persist on the server. If the page is refreshed, all matching patients will be in view again. This is to prevent needing to implement a recovery mechanism for “deleted” patients
 
 **Developer Instructions**
 
@@ -324,14 +324,14 @@ comes in.
 
 **FHIR Data**
 ------------
-To import the FHIR data, clone the tag-uploader repository and install
+To import the FHIR data, clone the tag-uploader repository in the `data/` directory and install
 the Node dependencies.
 
 git clone https://github.com/smart-on-fhir/tag-uploader\
 cd tag-uploader\
 npm install
 
-Ensure the FHIR server is running, then run the command in the
-tag-uploader directory to import the patient bundles.
+Ensure the FHIR server is running (using `docker-compose up fhir`), then run the command in the
+tag-uploader directory to import the test patient FHIR bundles in the data/bundles directory from the root of the repository.
 
 node . -v -d ../bundles -S http://localhost:8080/baseDstu3
