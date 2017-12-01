@@ -26,3 +26,19 @@ If new patient data is desired, it can be created by utlizing the "gen.py" pytho
 python gen.py {patient_name}
 ```
 This will generate a csv titled {patient_name}.csv in the data_gen folder.
+
+To add data to FHIR server, copy the csv data to a new json bundle file. An existing bundle file can be copied from the ./data/bundles file. Make sure to change the patient ID in the json file to match the ID of the new patient and also to udpate the URL based on the patient ID. Then change each "value" for each "unit" to match the csv file that was generated.
+
+To upload the new json to the FHIR server, clone the `tag-uploader` repository and install the Node dependencies.
+
+```
+git clone https://github.com/smart-on-fhir/tag-uploader
+cd tag-uploader
+npm install
+```
+
+Ensure the FHIR server is running, then run the command in the `tag-uploader` directory to import the patient bundles.
+
+```
+node . -v -d ../bundles -S http://localhost:8080/baseDstu3
+```
