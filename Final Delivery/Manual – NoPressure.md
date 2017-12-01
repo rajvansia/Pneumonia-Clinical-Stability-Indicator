@@ -160,13 +160,14 @@ The patient's heart rate measured in beats per minute (bpm).
 The patient's respiratory rate measured in breath rate per minute (brpm).
 
 **Temp**
+
 The patient's temperature measured in degrees Celsius.
 
 **SpO2**
 
 The patient's room air pulse oximetry (RA pulse ox) measured in percent.
 
-**Length of Stay **
+**Length of Stay**
 
 The amount of time the patient has been admitted measured in days.
 
