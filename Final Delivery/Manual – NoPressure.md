@@ -1,18 +1,24 @@
-﻿##**Community Acquired Pneumonia (CAP) Clinical Stability Predictor Manual**
+## **Community Acquired Pneumonia (CAP) Clinical Stability Predictor Manual**
 
 Georgia Institute of Technology
 CS 6440 - Intro to Health Informatics Fall 2017
 
 **Mentor**
+
 Dr. Lorenzo Di Francesco
 
 **Team No Pressure**
+
 Kishan Bhoopalam - PM
+
 Michael Fahey - QA
+
 Byron Ruth - Developer
+
 Raj Vansia - Developer
 
 **GitHub Repository**
+
 [https://github.gatech.edu/gt-hit-fall2017/Community-Acquired-Pneumonia-Clinical-Stability-Indicator](https://github.gatech.edu/gt-hit-fall2017/Community-Acquired-Pneumonia-Clinical-Stability-Indicator)
 
 **Introduction**
@@ -33,7 +39,7 @@ CAP Clinical Stability Predictor runs on Docker and therefore [Docker](https://d
 
 Once Docker is successfully installed on your system the next step in setting up the application is to download the Docker images. The follow section will discuss the steps necessary in order to download and run the application.
 
-1.  **Downloading the Repository and Docker Images. **
+1. **Downloading the Repository and Docker Images.**
 
 
     a.  To download the Docker images along with the rest of the repository used by the application, visit [https://github.gatech.edu/gt-hit-fall2017/Community-Acquired-Pneumonia-Clinical-Stability-Indicator](https://github.gatech.edu/gt-hit-fall2017/Community-Acquired-Pneumonia-Clinical-Stability-Indicator). Note: you may be prompted to login during this step. Follow the on screen directions to login.
@@ -44,14 +50,13 @@ Once Docker is successfully installed on your system the next step in setting up
    
    d.  Select the 'Download zip' button to begin downloading the repository and Docker images. Note: this may take some time to download depending on your internet speeds.
    
-  e.  Lastly, unzip the repository to be used in the next steps.
-
+   e.  Lastly, unzip the repository to be used in the next steps.
+ 
 	Alternatively, you can use the command line interface to clone the repository from GitHub using 
-	```
-	git clone https://github.gatech.edu/gt-hit-fall2017/Community-Acquired-Pneumonia-Clinical-Stability-Indicator.git
-	```
+	
+	`git clone https://github.gatech.edu/gt-hit-fall2017/Community-Acquired-Pneumonia-Clinical-Stability-Indicator.git`
 
-2. **Pulling the Latest Docker Images. **
+2. **Pulling the Latest Docker Images.**
 
 
 	The previous step should download the latest Docker images from the repository, however, it is always a good idea to pull for the latest images.
@@ -61,20 +66,22 @@ Once Docker is successfully installed on your system the next step in setting up
 	b.  Once you are inside of the Community-Acquired-Pneumonia-Clinical-Stability-Indicator directory, navigate to the directory called "Final Delivery"
 
 	c.  Now, run the following command from within the Final Delivery directory. This will take a few minutes to download and setup the latest images. 
+	
 	`docker-compose pull`
 
-3.  **Running the Docker Images. **
+3.  **Running the Docker Images.**
 
 	Now that the latest Docker images have been downloaded, the next step is to run the images.
 
 	a.  In order to run the Docker images you must be in the Final Delivery directory under Community-Acquired-Pneumonia-Clinical-Stability-Indicator (if you performed step 2 you should already be in this directory).
 
 	b.  Once you have navigated to the Final Delivery directory, run the following command
+	
 	`docker-compose up`
 
 	c.  On first run, this will pull four images from Docker Hub which may take several minutes depending on your Internet connection speed.
 
-4.  **Viewing the Application. **
+4.  **Viewing the Application.**
 
 	Once you have the Docker images successfully running, the next step is to bring up the user interface in order to view the application.
 
@@ -87,7 +94,8 @@ Once Docker is successfully installed on your system the next step in setting up
 If you are having difficulties running the application, there are a few troubleshooting steps you can try. Some common errors and troubleshooting steps are discussed below.
 
 1.  **Docker Not Running**
-When attempting to run the application if receive the following error it may be due to Docker not running.
+
+	When attempting to run the application if receive the following error it may be due to Docker not running.
 
 	> ***ERROR: Couldn't connect to Docker daemon - you might need to run 'docker-machine start default'***
 	
@@ -95,8 +103,7 @@ When attempting to run the application if receive the following error it may be 
 
 2.  **Application Not Running**
 
-	When attempting to view the application via the web browser at [http://localhost:5931](http://localhost:5931), you may see a blank screen or a screen that continuously says "loading..". This indicates that the application has not successfully finished loading. Ensure steps 1-3 have been completed in the **Application Setup** instruction and that several minutes have passed in order to give the server enough time to properly finish setting up. If the issue persists for more than a few minutes, quit Docker and perform steps 1-3 in the **Application Setup**. If this does not resolve the issue, try clearing the cache in your current web browser or try a
-different web browser.
+	When attempting to view the application via the web browser at [http://localhost:5931](http://localhost:5931), you may see a blank screen or a screen that continuously says "loading..". This indicates that the application has not successfully finished loading. Ensure steps 1-3 have been completed in the **Application Setup** instruction and that several minutes have passed in order to give the server enough time to properly finish setting up. If the issue persists for more than a few minutes, quit Docker and perform steps 1-3 in the **Application Setup**. If this does not resolve the issue, try clearing the cache in your current web browser or try a different web browser.
 
 3.  **Docker Unexpectedly Quit**
 
@@ -120,16 +127,20 @@ Within the patient list view, are individual patients. For each patient, the app
 
 **Individual Patient View Key**
 
-**Name **
+**Name**
+
 The patient's name.
 
-**DOB **
+**DOB**
+
 The patient's date of birth.
 
-**MRN **
+**MRN**
+
 The patient's medical record number.
 
-**Clinical stability **
+**Clinical stability**
+
 The status of the patient. This field can be either 'Clinically Stable' or 'Clinically Not Stable'.
 
 Clinically Stable indicates that based upon the patient's vital signs, the patient is exhibiting normal vital signs and clinicians can choose to switch therapy early in favor of intravenous antibiotics to oral antibiotics and possible early hospital discharge.
@@ -137,21 +148,26 @@ Clinically Stable indicates that based upon the patient's vital signs, the patie
 Clinically Not Stable indicates that based upon the patient's vital signs, the patient is not well enough to be discharged and further observation is required.
 
 **BP**
+
 The patient's systolic blood pressure measured in Millimetres of mercury (mm Hg).
 
 **HR**
+
 The patient's heart rate measured in beats per minute (bpm).
 
 **RR**
+
 The patient's respiratory rate measured in breath rate per minute (brpm).
 
 **Temp**
 The patient's temperature measured in degrees Celsius.
 
 **SpO2**
+
 The patient's room air pulse oximetry (RA pulse ox) measured in percent.
 
 **Length of Stay **
+
 The amount of time the patient has been admitted measured in days.
 
 **Deleting Patients**
