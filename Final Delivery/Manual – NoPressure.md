@@ -45,8 +45,12 @@ Once Docker is successfully installed on your system the next step in setting up
     a.  To download the Docker images along with the rest of the repository used by the application, visit [https://github.gatech.edu/gt-hit-fall2017/Community-Acquired-Pneumonia-Clinical-Stability-Indicator](https://github.gatech.edu/gt-hit-fall2017/Community-Acquired-Pneumonia-Clinical-Stability-Indicator). Note: you may be prompted to login during this step. Follow the on screen directions to login.
 
     b.  On the left hand side, ensure that next to branch 'master' is selected. If it does not show master, select the drop down box and choose master from the list.
+    
+   ![Imgur](https://i.imgur.com/gJ9i58L.png)
    
    c. Next, select the 'clone or download' button located on the right hand side.
+   
+   ![Imgur](https://i.imgur.com/FovNXnG.png)
    
    d.  Select the 'Download zip' button to begin downloading the repository and Docker images. Note: this may take some time to download depending on your internet speeds.
    
@@ -80,6 +84,8 @@ Once Docker is successfully installed on your system the next step in setting up
 	`docker-compose up`
 
 	c.  On first run, this will pull four images from Docker Hub which may take several minutes depending on your Internet connection speed.
+	
+	![Imgur](https://i.imgur.com/wCXF9K2.png)
 
 4.  **Viewing the Application.**
 
@@ -88,6 +94,8 @@ Once Docker is successfully installed on your system the next step in setting up
 	a.  Start by opening up a web browser, we recommend using either Safari or Chrome, and navigate to [http://localhost:5931](http://localhost:5931). Note: it may take a few moments to load depending on if step 3 has completed. If you see "Loading" for more than a few minutes, refresh your browser.
 
 	b.  You should now see the patient list in your browser. Refer to the section **Using the Application** for further details on how to interact with the application.
+	
+	![Imgur](https://i.imgur.com/uTXEdeT.png)
 
 **Troubleshooting**
 
@@ -121,9 +129,13 @@ At this point, you should have successfully started the Docker images and see th
 
 The initial view presented in the application is the patient list. The patient list displays a comprehensive list of patients who are currently diagnosed with CAP. The patient list is shown in the image below where we see three patients who have been diagnosed with CAP. From the patient list clinicians are able to monitor the status of their patients. The patient list is updated once every 24 hours where the patient's vital signs, length of stay and clinical stability will be updated.
 
+![Imgur](https://i.imgur.com/uTXEdeT.png)
+
 **Individual Patient View**
 
 Within the patient list view, are individual patients. For each patient, the application presents to the clinician information about the patient including their name, vital signs and stability status as shown in the image below. From this information, the clinician is able to quickly determine the required actions to take for an individual patient.
+
+![Imgur](https://i.imgur.com/VuL1jRF.png)
 
 **Individual Patient View Key**
 
