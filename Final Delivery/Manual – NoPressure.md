@@ -317,10 +317,14 @@ on the last 24 hours of vital sign data.
 ------------
 The frontend uses React to create reusable UI components. The frontend
 will retrieve patient data such as vital signs and CAP recommendation
-from the backend. With this data it will pass into React UI components.
-Utilizing React makes it easier to update state of the application to
-seamlessly update the UI components when new vitals/recommendation data
-comes in.
+from the backend by calling the /patients endpoint from the backend to update the state of the patients object.  
+We are using Redux Saga to manage state of our application. 
+
+With this data it will pass into React UI components Card this component dynamically generates a  patient card 
+for every patient that is in the patients object.
+
+Deleting patients updates the state of the current view by calling the PATIENT_DELETE action. This removes the patient 
+object from the patients list by id from the state.
 
 **FHIR Data**
 ------------
